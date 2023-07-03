@@ -1,0 +1,15 @@
+include:
+  - project: 'dhei/teams/pandora/gitlab-ci-templates'
+    file: 'products/gocomponents/GoComponent.Pipeline.gitlab-ci.yml'
+    ref: develop
+
+variables:
+  TARGET_IMAGE_SUBGROUP: horizon
+
+  KAFKA_HOST: docker:9094
+  KAFKA_IMAGE: dockerhub.devops.telekom.de/bitnami/kafka
+  KAFKA_TAG: 3.4.1
+
+  MONGO_HOST: docker:27017
+  MONGO_IMAGE: dockerhub.devops.telekom.de/mongo
+  MONGO_TAG: 7.0.5-rc0

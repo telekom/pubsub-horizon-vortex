@@ -1,0 +1,8 @@
+.idea
+.vscode
+.fleet
+
+*.yml
+!.gitlab-ci.yml
+!docker-compose.yml
+*.exe

@@ -1,0 +1,31 @@
+{
+  "uuid": "13ac0e49-4936-490e-82a9-13c01f3b1051",
+  "event": {
+    "id": "44cd596d-dc97-4991-a87c-c34a39cfddff",
+    "type": "vortex.test.event",
+    "time": "2024-01-03T10:13:15.515Z"
+  },
+  "subscriptionId": "0df6658da8ecfa2da46ab6cbf9010db601454b2f",
+  "status": "DROPPED",
+  "additionalFields": {
+    "subscriber-id": "vortex--test--event--subscriber",
+    "X-B3-SpanId": "0d3e2962171e3ff6",
+    "X-B3-ParentSpanId": "9c4e79c0244fa7f4",
+    "callback-url": "https://example.com/callback",
+    "X-B3-Sampled": "1",
+    "X-B3-TraceId": "618c9230e85ccde4c87895ca2d61abba",
+    "selectionFilterResult": "CONSUMER_FILTER_ERROR",
+    "system-horizon-event-startTime": 1704276795515,
+    "selectionFilterTrace": {
+      "operatorName": "equal",
+      "match": false,
+      "causeDescription": "<Legacy> Value at specified path does not match expected value.",
+      "operator": {
+        "operator": "EQ",
+        "expectedValue": "Hello world!",
+        "jsonPath": "message"
+      }
+    }
+  },
+  "deliveryType": "CALLBACK"
+}

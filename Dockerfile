@@ -1,3 +1,7 @@
+# Copyright 2024 Deutsche Telekom IT GmbH
+#
+# SPDX-License-Identifier: Apache-2.0
+
 FROM dockerhub.devops.telekom.de/golang:1.21-alpine AS build
 ARG GOPROXY
 ARG GONOSUMDB

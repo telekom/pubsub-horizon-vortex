@@ -1,3 +1,9 @@
+<!--
+Copyright 2024 Deutsche Telekom IT GmbH
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <p align="center">
   <img src="./docs/img/vortex-logo.png" alt="Vortex logo" width="200px" height="200px">
   <h1 align="center">Vortex</h1>

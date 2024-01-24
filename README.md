@@ -14,13 +14,6 @@ SPDX-License-Identifier: Apache-2.0
   A connector for transferring and transforming data from Kafka to MongoDB.
 </p>
 
-<p align="center">
-  <img src="https://shields.devops.telekom.de/badge/Made%20with%20%E2%9D%A4%20%20by-%F0%9F%90%BC-blue" alt="Made With Love Badge"/>
-  <img src="https://gitlab.devops.telekom.de/dhei/teams/pandora/products/horizon/vortex/badges/develop/coverage.svg" alt="Coverage Badge"/>
-  <img src="https://gitlab.devops.telekom.de/dhei/teams/pandora/products/horizon/vortex/-/badges/release.svg" alt="Release Badge"/>
-</p>
-
-
 ## Overview
 Vortex is a connector for transferring and transforming data from Kafka to MongoDB. It is custom tailored for the data 
 produced and processed by Horizon.

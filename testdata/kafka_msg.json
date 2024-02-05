@@ -1,0 +1,99 @@
+{
+  "uuid": "9475695c-d29c-4a91-ba5c-62a9c5a867b5",
+  "environment": "playground",
+  "additionalFields": {
+    "subscriber-id": "vortex--example--subscriber",
+    "X-B3-SpanId": "9bba7ccc5a2255a4",
+    "X-B3-ParentSpanId": "ad217c5470d1348f",
+    "callback-url": "https://example.com/callback",
+    "X-B3-Sampled": "1",
+    "X-B3-TraceId": "5847073714cf4139ea5cb9c23c60b3f9",
+    "selectionFilterResult": "NO_FILTER",
+    "system-horizon-event-startTime": 1704262235592
+  },
+  "event": {
+    "time": "2024-01-03T06:10:35.592Z",
+    "id": "9906d8c3-b965-4f00-9f98-ae9c96565009",
+    "type": "vortex.test.event",
+    "source": "http://apihost/some/path/resource/1234",
+    "specversion": "1.0",
+    "datacontenttype": "application/json",
+    "dataref": "http://apihost/some/api/v1/resource/1234",
+    "data": {
+      "message": "Hello world!"
+    }
+  },
+  "status": "PROCESSED",
+  "httpHeaders": {
+    "x-request-id": [
+      "fb9fc4e82651915ca6f06e79cb3b06b1"
+    ],
+    "x-b3-parentspanid": [
+      "9ad7cda3a266fbc9"
+    ],
+    "x-business-context": [
+      "somecontext"
+    ],
+    "x-event-id": [
+      "9906d8c3-b965-4f00-9f98-ae9c96565009"
+    ],
+    "x-event-type": [
+      "vortex.test.event"
+    ],
+    "x-subscription-id": [
+      "0df6658da8ecfa2da46ab6cbf9010db601454b2f"
+    ],
+    "x-b3-sampled": [
+      "1"
+    ],
+    "x-pubsub-subscriber-id": [
+      "vortex--example--subscriber"
+    ],
+    "x-correlation-id": [
+      "somecorrelation"
+    ],
+    "x-tardis-traceid": [
+      "a247cf65f9f782ad1ad92332353037373431"
+    ],
+    "track-latency": [
+      "0"
+    ],
+    "x-real-ip": [
+      "0.0.0.0"
+    ],
+    "environment": [
+      "playground"
+    ],
+    "x-origin-stargate": [
+      "https://example.com"
+    ],
+    "x-b3-traceid": [
+      "5847073714cf4139ea5cb9c23c60b3f9"
+    ],
+    "x-b3-spanid": [
+      "60c10dd5e7ebddc8"
+    ],
+    "content-type": [
+      "application/json"
+    ],
+    "realm": [
+      "default"
+    ],
+    "x-origin-zone": [
+      "aws"
+    ],
+    "x-scheme": [
+      "https"
+    ],
+    "x-pubsub-publisher-id": [
+      "vortex--example--publisher"
+    ],
+    "user-agent": [
+      "insomnium/0.2.3-a"
+    ]
+  },
+  "deliveryType": "CALLBACK",
+  "subscriptionId": "0df6658da8ecfa2da46ab6cbf9010db601454b2f",
+  "multiplexedFrom": "b669b490-7720-46f6-9e80-6310c1a9ed7b",
+  "eventRetentionTime": "DEFAULT"
+}

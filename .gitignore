@@ -1,3 +1,12 @@
-# SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
+# Copyright 2024 Deutsche Telekom IT GmbH
 #
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-License-Identifier: Apache-2.0
+
+.idea
+.vscode
+.fleet
+
+*.yml
+!.gitlab-ci.yml
+!docker-compose.yml
+*.exe

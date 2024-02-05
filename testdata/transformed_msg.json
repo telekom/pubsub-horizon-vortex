@@ -1,0 +1,23 @@
+{
+  "deliveryType": "CALLBACK",
+  "environment": "playground",
+  "event._id": "9906d8c3-b965-4f00-9f98-ae9c96565009",
+  "event.id": "9906d8c3-b965-4f00-9f98-ae9c96565009",
+  "event.time": "2024-01-03T06:10:35.592Z",
+  "event.type": "vortex.test.event",
+  "eventRetentionTime": "DEFAULT",
+  "modified": "2024-01-04T08:44:14.7447235Z",
+  "multiplexedFrom": "b669b490-7720-46f6-9e80-6310c1a9ed7b",
+  "properties.X-B3-ParentSpanId": "ad217c5470d1348f",
+  "properties.X-B3-Sampled": "1",
+  "properties.X-B3-SpanId": "9bba7ccc5a2255a4",
+  "properties.X-B3-TraceId": "5847073714cf4139ea5cb9c23c60b3f9",
+  "properties.callback-url": "https://example.com/callback",
+  "properties.selectionFilterResult": "NO_FILTER",
+  "properties.subscriber-id": "vortex--example--subscriber",
+  "properties.system-horizon-event-startTime": 1704262235592,
+  "properties.x-business-context": "somecontext",
+  "properties.x-correlation-id": "somecorrelation",
+  "status": "PROCESSED",
+  "subscriptionId": "0df6658da8ecfa2da46ab6cbf9010db601454b2f"
+}

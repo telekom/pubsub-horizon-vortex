@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Vortex
+Upstream-Contact: Deutsche Telekom AG <opensource@telekom.de>
+Source: https://github.com/telekom/pubsub-horizon-vortex
+
+Files: docs/img/*
+Copyright: Copyright 2024 Deutsche Telekom IT GmbH
+License: CC-BY-4.0
+
+Files: renovate.json testdata/* go.mod go.sum
+Copyright: Copyright 2024 Deutsche Telekom IT GmbH
+License: Apache-2.0

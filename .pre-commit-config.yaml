@@ -1,0 +1,9 @@
+# Copyright 2024 Deutsche Telekom IT GmbH
+#
+# SPDX-License-Identifier: Apache-2.0
+
+repos:
+  -   repo: https://github.com/fsfe/reuse-tool
+      rev: v1.0.0
+      hooks:
+        - id: reuse

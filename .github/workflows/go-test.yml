@@ -1,0 +1,38 @@
+# Copyright 2024 Deutsche Telekom IT GmbH
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Go Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.12-dind
+        ports:
+          - 2375:2375
+          - 9094:9094
+          - 27017:27017
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.21
+
+    - name: Run go test
+      env:
+        KAFKA_HOST: localhost:9094
+        KAFKA_IMAGE: bitnami/kafka
+        KAFKA_TAG: 3.4.1
+        MONGO_HOST: localhost:27017
+        MONGO_IMAGE: mongo
+        MONGO_TAG: 7.0.5-rc0
+      run: go test -v ./...

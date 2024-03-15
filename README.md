@@ -76,8 +76,6 @@ Vortex supports configuration via environment variables and/or a configuration f
 | mongo.writeConcern.journal | VORTEX_MONGO_WRITECONCERN_JOURNAL | bool          | false                     | Whether new entries have to be written to disk to be acknowledged or not. ([See MongoDB docs](https://www.mongodb.com/docs/manual/reference/write-concern/)) |
 
 ## Running Vortex
-
-## Running Vortex
 ### Locally
 Before you can run Vortex locally you must have a running instance of Kafka and MongoDB locally or forwarded from a remote cluster.  
 

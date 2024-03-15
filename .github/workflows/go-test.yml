@@ -35,4 +35,25 @@ jobs:
         MONGO_HOST: localhost:27017
         MONGO_IMAGE: mongo
         MONGO_TAG: 7.0.5-rc0
-      run: go test -v ./...
+      run: go test -v ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+
+    - name: Prepare archive
+      run: mkdir -p ./out/reports ./out/badges
+
+    - name: Generate coverage report
+      run: go tool cover -html=cover.out -o=./out/reports/coverage-report.html
+
+    - name: Check test coverage
+      uses: vladopajic/go-test-coverage@v2
+      with:
+        profile: cover.out
+        local-prefix: github.com/telekom/pubsub-horizon-vortex
+        badge-file-name: ./out/badges/coverage.svg
+        git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
+        git-branch: badges
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifacts
+        path: ./out/**

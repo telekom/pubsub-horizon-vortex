@@ -5,13 +5,19 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <p align="center">
-  <img src="./docs/img/vortex-logo.png" alt="Vortex logo" width="200px" height="200px">
-  <h1 align="center">Vortex</h1>
+  <img src="docs/img/vortex-logo.png" alt="Vortex logo" width="200">
+  <h1 align="center">Polaris</h1>
 </p>
 
+<p align="center">
+  Connector used by Horizon for transferring and transforming data from Kafka to MongoDB.
+</p>
 
 <p align="center">
-  A connector for transferring and transforming data from Kafka to MongoDB.
+  <a href="#prerequisites">Prerequisites</a> •
+  <a href="#building-vortex">Building Voretex</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#running-vortex">Running Vortex</a>
 </p>
 
 [![REUSE status](https://api.reuse.software/badge/github.com/telekom/pubsub-horizon-vortex)](https://api.reuse.software/info/github.com/telekom/pubsub-horizon-vortex)
@@ -26,8 +32,24 @@ There's a docker-compose file included in this project which provides a Kafka, K
 - A running Kafka broker
 - A running MongoDB instance
 
-## Running Vortex
-To run vortex simply run `vortex serve` to start processing incoming messages.
+## Building Vortex
+
+### Go build
+
+Assuming you have already installed [go](https://go.dev/), simply run the follwoing to build the executable:
+```bash
+go build
+```
+
+> Alternatively, you can also follow the Docker build in the following section if you want to build a Docker image without the need to have Golang installed locally.
+
+### Docker build
+
+This repository provides a multi-stage Dockerfile that will also take care about compiling the software, as well as dockerizing Vortex. Simply run:
+
+```bash
+docker build -t horizon-vortex:latest  . 
+```
 
 ## Configuration
 Vortex supports configuration via environment variables and/or a configuration file (`config.yml`). The configuration file has to be located in the same directory as the executable and is created by running `vortex init` or `go run . init`.
@@ -52,6 +74,22 @@ Vortex supports configuration via environment variables and/or a configuration f
 | mongo.flushIntervalSec     | VORTEX_MONGO_FLUSHINTERVALSEC     | int           | 30                        | The amount of seconds between flushes of the bulk buffer.                                                                                                    |
 | mongo.writeConcern.writes  | VORTEX_MONGO_WRITECONCERN_WRITES  | int           | 1                         | The amount of writes required for a write to be acknowledged. ([See MongoDB docs](https://www.mongodb.com/docs/manual/reference/write-concern/))             |
 | mongo.writeConcern.journal | VORTEX_MONGO_WRITECONCERN_JOURNAL | bool          | false                     | Whether new entries have to be written to disk to be acknowledged or not. ([See MongoDB docs](https://www.mongodb.com/docs/manual/reference/write-concern/)) |
+
+## Running Vortex
+
+## Running Vortex
+### Locally
+Before you can run Vortex locally you must have a running instance of Kafka and MongoDB locally or forwarded from a remote cluster.  
+
+After that you can run Vortex locally simply by using the following command, which will immediately start the processing of incoming messages:
+```shell
+./vortex serve
+```
+
+## Contributing
+
+We're committed to open source, so we welcome and encourage everyone to join its developer community and contribute, whether it's through code or feedback.  
+By participating in this project, you agree to abide by its [Code of Conduct](./CODE_OF_CONDUCT.md) at all times.
 
 ## Code of Conduct
 This project has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) in version 2.1 as our code of conduct. Please see the details in our [Code of Conduct](CODE_OF_CONDUCT.md). All contributors must abide by the code of conduct.

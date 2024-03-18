@@ -15,7 +15,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <p align="center">
   <a href="#prerequisites">Prerequisites</a> •
-  <a href="#building-vortex">Building Voretex</a> •
+  <a href="#building-vortex">Building Vortex</a> •
   <a href="#configuration">Configuration</a> •
   <a href="#running-vortex">Running Vortex</a>
 </p>

@@ -77,7 +77,7 @@ Vortex supports configuration via environment variables and/or a configuration f
 
 ## Running Vortex
 ### Locally
-Before you can run Vortex locally you must have a running instance of Kafka and MongoDB locally or forwarded from a remote cluster.  
+Before you can run Vortex locally, you must have a running instance of Kafka and MongoDB locally or forwarded from a remote cluster.  
 
 After that you can run Vortex locally simply by using the following command, which will immediately start the processing of incoming messages:
 ```shell

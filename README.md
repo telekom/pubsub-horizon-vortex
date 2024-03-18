@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <p align="center">
   <img src="docs/img/vortex-logo.png" alt="Vortex logo" width="200">
-  <h1 align="center">Polaris</h1>
+  <h1 align="center">Vortex</h1>
 </p>
 
 <p align="center">

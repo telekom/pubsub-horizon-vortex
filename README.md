@@ -36,7 +36,7 @@ There's a docker-compose file included in this project which provides a Kafka, K
 
 ### Go build
 
-Assuming you have already installed [go](https://go.dev/), simply run the follwoing to build the executable:
+Assuming you have already installed [Go](https://go.dev/), simply run the follwoing to build the executable:
 ```bash
 go build
 ```

@@ -45,7 +45,7 @@ go build
 
 ### Docker build
 
-This repository provides a multi-stage Dockerfile that will also take care about compiling the software, as well as dockerizing Vortex. Simply run:
+This repository provides a multi-stage Dockerfile that will also take care of compiling the software, as well as dockerizing Vortex. Simply run:
 
 ```bash
 docker build -t horizon-vortex:latest  . 

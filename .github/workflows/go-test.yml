@@ -30,7 +30,7 @@ jobs:
     - name: Run go test
       env:
         KAFKA_HOST: localhost:9094
-        KAFKA_IMAGE: bitnami/kafka
+        KAFKA_IMAGE: bitnamilegacy/kafka
         KAFKA_TAG: 3.4.1
         MONGO_HOST: localhost:27017
         MONGO_IMAGE: mongo

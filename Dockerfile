@@ -15,6 +15,10 @@ COPY . .
 RUN apk add --no-cache build-base
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s -extldflags=-static" -o vortex
 
+FROM alpine:latest as certs
+RUN apk --update add ca-certificates
+
 FROM scratch
 COPY --from=build /build/vortex vortex
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["./vortex", "serve"]

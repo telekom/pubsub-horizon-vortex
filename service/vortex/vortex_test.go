@@ -8,6 +8,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
+	"os"
+	"testing"
+	"time"
+	"vortex/service/config"
+	"vortex/service/vortex"
+
 	"github.com/IBM/sarama"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
@@ -15,12 +22,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"os"
-	"testing"
-	"time"
-	"vortex/service/config"
-	"vortex/service/vortex"
 )
 
 var (
@@ -79,7 +80,7 @@ func TestMain(m *testing.M) {
 	kafkaContainer, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Hostname:   "kafka",
 		Name:       "vortex-kafka",
-		Repository: envOrDefault("KAFKA_IMAGE", "bitnami/kafka"),
+		Repository: envOrDefault("KAFKA_IMAGE", "bitnamilegacy/kafka"),
 		Tag:        envOrDefault("KAFKA_TAG", "3.4.1"),
 		Env: []string{
 			"KAFKA_ENABLE_KRAFT=yes",

@@ -5,7 +5,6 @@
 package vortex
 
 import (
-	"github.com/rs/zerolog/log"
 	"os"
 	"os/signal"
 	"sync"
@@ -14,6 +13,8 @@ import (
 	"vortex/service/kafka"
 	"vortex/service/metrics"
 	"vortex/service/mongo"
+
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -40,9 +41,7 @@ func StartPipeline(config config.Configuration) {
 		log.Fatal().Err(err).Msg("Could not establish database connection!")
 	}
 
-	if metrics.IsEnabled() {
-		go metrics.ExposeMetrics()
-	}
+	go metrics.ExposeMetrics()
 
 	go sink.Start(processGroup)
 	go source.Start(processGroup)

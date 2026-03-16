@@ -6,16 +6,17 @@ package metrics
 
 import (
 	"fmt"
-	"github.com/IBM/sarama"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
 	"time"
 	"vortex/service/config"
 	"vortex/service/utils"
+
+	"github.com/IBM/sarama"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/zerolog/log"
 )
 
 const Namespace = "vortex"
@@ -43,7 +44,7 @@ func init() {
 }
 
 func RecordConsumption(message *sarama.ConsumerMessage) {
-	if !IsEnabled() {
+	if !isEnabled() {
 		return
 	}
 
@@ -67,25 +68,35 @@ func RecordConsumption(message *sarama.ConsumerMessage) {
 }
 
 func RecordUpserts(datasetCount float64) {
-	if !IsEnabled() {
+	if !isEnabled() {
 		return
 	}
 	upsertedTotal.Add(float64(datasetCount))
 }
 
 func ExposeMetrics() {
-	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{
-		Timeout: 15 * time.Second,
-	}))
+	http.HandleFunc("/livez", healthHandler("livez"))
+	http.HandleFunc("/readyz", healthHandler("readyz"))
 
-	go func() {
-		var addr = fmt.Sprintf(":%d", config.Current.Metrics.Port)
+	var metricsEnabled = isEnabled()
+	if metricsEnabled {
+		http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{
+			Timeout: 15 * time.Second,
+		}))
+	}
+
+	go func(port int) {
+		var addr = fmt.Sprintf(":%d", port)
 		if err := http.ListenAndServe(addr, nil); err != nil {
-			log.Panic().Err(err).Msg("Could not start serving metrics!")
+			log.Panic().Err(err).Msg("Could not start health/metrics server!")
 		}
-	}()
+	}(config.Current.Metrics.Port)
 
-	log.Info().Msgf("Serving metrics on port %d", config.Current.Metrics.Port)
+	if metricsEnabled {
+		log.Info().Msgf("Serving /metrics, /livez and /readyz on port %d", config.Current.Metrics.Port)
+	} else {
+		log.Info().Msgf("Serving /livez and /readyz on port %d (metrics disabled)", config.Current.Metrics.Port)
+	}
 }
 
 func createCounter(name string, help string) prometheus.Counter {
@@ -96,9 +107,19 @@ func createCounter(name string, help string) prometheus.Counter {
 	})
 }
 
-func IsEnabled() bool {
+func isEnabled() bool {
 	if enabled == nil {
 		enabled = &config.Current.Metrics.Enabled
 	}
 	return *enabled
+}
+
+func healthHandler(endpoint string) http.HandlerFunc {
+	var body = []byte("ok")
+	return func(writer http.ResponseWriter, request *http.Request) {
+		writer.WriteHeader(http.StatusOK)
+		if _, err := writer.Write(body); err != nil {
+			log.Error().Err(err).Msgf("Could not write %s response", endpoint)
+		}
+	}
 }

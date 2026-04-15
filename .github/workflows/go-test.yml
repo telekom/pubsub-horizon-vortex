@@ -20,12 +20,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4
       with:
-        go-version: 1.21
+        go-version-file: go.mod
 
     - name: Run go test
       env:
@@ -44,7 +44,7 @@ jobs:
       run: go tool cover -html=cover.out -o=./out/reports/coverage-report.html
 
     - name: Check test coverage
-      uses: vladopajic/go-test-coverage@v2
+      uses: vladopajic/go-test-coverage@f190f667e23b4441202d0bab0f8c2e7bce8925b6 # v2
       with:
         profile: cover.out
         local-prefix: github.com/telekom/pubsub-horizon-vortex
@@ -53,7 +53,7 @@ jobs:
         git-branch: badges
 
     - name: Archive artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: artifacts
         path: ./out/**

@@ -6,6 +6,9 @@ name: Go Test
 
 on: [push]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest

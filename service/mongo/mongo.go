@@ -7,12 +7,6 @@ package mongo
 import (
 	"context"
 	"encoding/json"
-	"github.com/IBM/sarama"
-	"github.com/rs/zerolog/log"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"sync"
 	"time"
 	"vortex/service/config"
@@ -20,6 +14,13 @@ import (
 	"vortex/service/metrics"
 	"vortex/service/transforms"
 	"vortex/service/utils"
+
+	"github.com/IBM/sarama"
+	"github.com/rs/zerolog/log"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 )
 
 type Connection struct {
@@ -74,10 +75,23 @@ func (c *Connection) Start(processGroup *sync.WaitGroup) {
 	go c.flushWithInterval(time.Duration(c.config.FlushIntervalSec) * time.Second)
 
 	defer processGroup.Done()
+	defer func() {
+		if err := c.client.Disconnect(context.Background()); err != nil {
+			log.Fatal().Err(err).Msg("Could not disconnect from database")
+		}
+	}()
+
 	for {
 		select {
+		case message, ok := <-c.source.GetOutput():
+			if !ok {
+				c.flush()
+				return
+			}
+			if message == nil {
+				continue
+			}
 
-		case message := <-c.source.GetOutput():
 			if err := c.upsert(message); err != nil {
 				var fields = utils.GetFieldsFromMessage(message)
 				log.Fatal().Fields(fields).Err(err).Msg("Could not perform update in database")
@@ -86,14 +100,6 @@ func (c *Connection) Start(processGroup *sync.WaitGroup) {
 		case <-c.connectionContext.Done():
 			c.flush()
 			return
-
-		default:
-			if c.connectionContext.Err() != nil {
-				if err := c.client.Disconnect(c.connectionContext); err != nil {
-					log.Fatal().Err(err).Msg("Could no disconnect from database")
-				}
-			}
-
 		}
 	}
 }

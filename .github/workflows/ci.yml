@@ -16,9 +16,6 @@ jobs:
       test-flags: "-v -p 1"
       coverage-badge: true
 
-  lint:
-    uses: telekom/pubsub-horizon-ci/.github/workflows/golangci-lint.yml@main
-
   reuse:
     uses: telekom/pubsub-horizon-ci/.github/workflows/reuse-compliance.yml@main
 

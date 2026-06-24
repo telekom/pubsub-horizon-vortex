@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom IT GmbH
+#
+# SPDX-License-Identifier: CC0-1.0
+
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Vortex
 Upstream-Contact: Deutsche Telekom AG <opensource@telekom.de>

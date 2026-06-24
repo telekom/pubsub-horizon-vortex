@@ -7,11 +7,17 @@ name: CI
 on:
   push:
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write
     uses: telekom/pubsub-horizon-ci/.github/workflows/go-test.yml@main
     with:
       test-flags: "-v -p 1"
+      coverage-badge: true
 
   reuse:
     uses: telekom/pubsub-horizon-ci/.github/workflows/reuse-compliance.yml@main

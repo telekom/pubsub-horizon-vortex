@@ -11,6 +11,14 @@ permissions:
   contents: read
 
 jobs:
+  codeql:
+    permissions:
+      contents: read
+      security-events: write
+    uses: telekom/pubsub-horizon-ci/.github/workflows/codeql.yml@main
+    with:
+      languages: '["go"]'
+
   build:
     permissions:
       contents: write

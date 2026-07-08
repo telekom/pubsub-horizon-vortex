@@ -113,6 +113,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 
 	if err := json.Unmarshal(message.Value, &document); err != nil {
 		var fields = utils.GetFieldsFromMessage(message)
+		metrics.RecordSkipped("json_parse")
 		log.Error().
 			Fields(fields).
 			Err(err).
@@ -125,6 +126,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 		if castedId, ok := castedEvent["id"]; ok {
 			filter["event.id"] = castedId
 		} else {
+			metrics.RecordSkipped("faulty_event")
 			log.Warn().Fields(map[string]any{
 				"partition": message.Partition,
 				"offset":    message.Offset,
@@ -132,6 +134,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 			return nil
 		}
 	} else {
+		metrics.RecordSkipped("faulty_event")
 		log.Warn().Fields(map[string]any{
 			"partition": message.Partition,
 			"offset":    message.Offset,
@@ -143,6 +146,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 	var transformedDoc, err = transforms.GlobalRegistry.ApplyTransforms(document)
 	if err != nil {
 		var fields = utils.GetFieldsFromMessage(message)
+		metrics.RecordSkipped("transform")
 		log.Error().Fields(fields).Err(err).Msg("Could not apply transformations to document. Skipping message.")
 		return nil
 	}

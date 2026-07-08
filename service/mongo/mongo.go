@@ -7,12 +7,6 @@ package mongo
 import (
 	"context"
 	"encoding/json"
-	"github.com/IBM/sarama"
-	"github.com/rs/zerolog/log"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"sync"
 	"time"
 	"vortex/service/config"
@@ -20,6 +14,13 @@ import (
 	"vortex/service/metrics"
 	"vortex/service/transforms"
 	"vortex/service/utils"
+
+	"github.com/IBM/sarama"
+	"github.com/rs/zerolog/log"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 )
 
 type Connection struct {
@@ -80,7 +81,7 @@ func (c *Connection) Start(processGroup *sync.WaitGroup) {
 		case message := <-c.source.GetOutput():
 			if err := c.upsert(message); err != nil {
 				var fields = utils.GetFieldsFromMessage(message)
-				log.Fatal().Fields(fields).Err(err).Msg("Could not perform update in database")
+				log.Error().Fields(fields).Err(err).Msg("Unexpected error during upsert. Skipping message to avoid blocking partition.")
 			}
 
 		case <-c.connectionContext.Done():
@@ -111,7 +112,12 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 	}
 
 	if err := json.Unmarshal(message.Value, &document); err != nil {
-		return err
+		var fields = utils.GetFieldsFromMessage(message)
+		log.Error().
+			Fields(fields).
+			Err(err).
+			Msg("Failed to parse message payload as JSON. Skipping message to avoid blocking partition.")
+		return nil
 	}
 	delete(document, "_id")
 
@@ -136,7 +142,9 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 	document["topic"] = message.Topic
 	var transformedDoc, err = transforms.GlobalRegistry.ApplyTransforms(document)
 	if err != nil {
-		log.Fatal().Fields(utils.GetFieldsFromMessage(message)).Err(err).Msg("Could not apply transformations to document")
+		var fields = utils.GetFieldsFromMessage(message)
+		log.Error().Fields(fields).Err(err).Msg("Could not apply transformations to document. Skipping message.")
+		return nil
 	}
 
 	var messageType = utils.GetHeader(message.Headers, "type")

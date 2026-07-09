@@ -7,6 +7,7 @@ package mongo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"sync"
 	"time"
 	"vortex/service/config"
@@ -184,16 +185,39 @@ func (c *Connection) flush() {
 
 	result, err := collection.BulkWrite(c.connectionContext, c.bulk, opts)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Could not perform bulk-write")
+		var bulkErr mongo.BulkWriteException
+		if !errors.As(err, &bulkErr) || bulkErr.WriteConcernError != nil {
+			// Anything that is not a per-document write error (e.g. lost
+			// connection or an unsatisfied write concern) is treated as fatal,
+			// just like before.
+			log.Fatal().Err(err).Msg("Could not perform bulk-write")
+		}
+
+		// Only duplicate-key violations are skipped: these are poison messages
+		// that will never succeed. Any other write error remains fatal.
+		for _, writeErr := range bulkErr.WriteErrors {
+			if writeErr.Code != 11000 {
+				log.Fatal().Err(err).Msg("Could not perform bulk-write")
+			}
+
+			metrics.RecordSkipped("duplicate_key")
+			log.Warn().
+				Err(err).
+				Int("code", writeErr.Code).
+				Int("index", writeErr.Index).
+				Str("reason", writeErr.Message).
+				Msg("Skipping poison message due to duplicate key violation.")
+		}
 	}
 
 	var fields = map[string]any{
+		"matched":  result.MatchedCount,
 		"upserted": result.UpsertedCount,
 		"inserted": result.InsertedCount,
 		"modified": result.ModifiedCount,
 	}
 	log.Debug().Fields(fields).Msgf("Completed bulk-write")
-	metrics.RecordUpserts(float64(len(c.bulk)))
+	metrics.RecordUpserts(float64(result.MatchedCount + result.UpsertedCount))
 
 	c.bulk = make([]mongo.WriteModel, 0)
 	c.source.CommitOffsets()

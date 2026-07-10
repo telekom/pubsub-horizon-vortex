@@ -127,6 +127,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 		if castedId, ok := castedEvent["id"]; ok {
 			filter["event.id"] = castedId
 		} else {
+			// event.id is missing
 			metrics.RecordSkipped("faulty_event")
 			log.Warn().Fields(map[string]any{
 				"partition": message.Partition,
@@ -135,6 +136,7 @@ func (c *Connection) upsert(message *sarama.ConsumerMessage) error {
 			return nil
 		}
 	} else {
+		// event is missing or no object
 		metrics.RecordSkipped("faulty_event")
 		log.Warn().Fields(map[string]any{
 			"partition": message.Partition,
@@ -217,7 +219,7 @@ func (c *Connection) flush() {
 		"modified": result.ModifiedCount,
 	}
 	log.Debug().Fields(fields).Msgf("Completed bulk-write")
-	metrics.RecordUpserts(float64(result.MatchedCount + result.UpsertedCount))
+	metrics.RecordUpserts(float64(result.UpsertedCount))
 
 	c.bulk = make([]mongo.WriteModel, 0)
 	c.source.CommitOffsets()

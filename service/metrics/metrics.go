@@ -36,9 +36,9 @@ var (
 func init() {
 	registry = prometheus.NewRegistry()
 
-	messagesConsumedTotal = createCounter("messages_consumed_total", "The total amount of consumed messages")
-	metadataConsumedTotal = createCounter("metadata_consumed_total", "The total amount of consumed metadata")
-	upsertedTotal = createCounter("upserted_total", "The total amount of upserted datasets")
+	messagesConsumedTotal = createCounter("messages_consumed_total", "The total number of consumed Kafka messages of type MESSAGE")
+	metadataConsumedTotal = createCounter("metadata_consumed_total", "The total number of consumed Kafka messages of type METADATA")
+	upsertedTotal = createCounter("upserted_total", "The total number of newly created database documents (inserts via upsert)")
 	skippedMessagesTotal = createCounterVec(
 		"messages_skipped_total",
 		"The total amount of skipped messages grouped by reason",

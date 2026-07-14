@@ -24,6 +24,7 @@ const Namespace = "vortex"
 var (
 	messagesConsumedTotal prometheus.Counter
 	metadataConsumedTotal prometheus.Counter
+	skippedMessagesTotal  *prometheus.CounterVec
 
 	upsertedTotal prometheus.Counter
 
@@ -35,12 +36,16 @@ var (
 func init() {
 	registry = prometheus.NewRegistry()
 
-	messagesConsumedTotal = createCounter("messages_consumed_total", "The total amount of consumed messages")
-	metadataConsumedTotal = createCounter("metadata_consumed_total", "The total amount of consumed metadata")
-	registry.MustRegister(messagesConsumedTotal, metadataConsumedTotal)
+	messagesConsumedTotal = createCounter("messages_consumed_total", "The total number of consumed Kafka messages of type MESSAGE")
+	metadataConsumedTotal = createCounter("metadata_consumed_total", "The total number of consumed Kafka messages of type METADATA")
+	upsertedTotal = createCounter("upserted_total", "The total number of newly created database documents (inserts via upsert)")
+	skippedMessagesTotal = createCounterVec(
+		"messages_skipped_total",
+		"The total amount of skipped messages grouped by reason",
+		[]string{"reason"},
+	)
+	registry.MustRegister(messagesConsumedTotal, metadataConsumedTotal, skippedMessagesTotal, upsertedTotal)
 
-	upsertedTotal = createCounter("upserted_total", "The total amount of upserted datasets")
-	registry.MustRegister(upsertedTotal)
 }
 
 func RecordConsumption(message *sarama.ConsumerMessage) {
@@ -74,6 +79,13 @@ func RecordUpserts(datasetCount float64) {
 	upsertedTotal.Add(float64(datasetCount))
 }
 
+func RecordSkipped(reason string) {
+	if !isEnabled() {
+		return
+	}
+	skippedMessagesTotal.WithLabelValues(reason).Inc()
+}
+
 func ExposeMetrics() {
 	http.HandleFunc("/livez", healthHandler("livez"))
 	http.HandleFunc("/readyz", healthHandler("readyz"))
@@ -105,6 +117,14 @@ func createCounter(name string, help string) prometheus.Counter {
 		Name:      name,
 		Help:      help,
 	})
+}
+
+func createCounterVec(name string, help string, labels []string) *prometheus.CounterVec {
+	return promauto.NewCounterVec(prometheus.CounterOpts{
+		Namespace: Namespace,
+		Name:      name,
+		Help:      help,
+	}, labels)
 }
 
 func isEnabled() bool {

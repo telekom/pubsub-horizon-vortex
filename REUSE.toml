@@ -1,0 +1,16 @@
+version = 1
+SPDX-PackageName = "Vortex"
+SPDX-PackageSupplier = "Deutsche Telekom AG <opensource@telekom.de>"
+SPDX-PackageDownloadLocation = "https://github.com/telekom/pubsub-horizon-vortex"
+
+[[annotations]]
+path = "docs/img/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["renovate.json", "testdata/**", "go.mod", "go.sum"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-License-Identifier = "Apache-2.0"

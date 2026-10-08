@@ -84,15 +84,7 @@ func (c *Connection) Start(processGroup *sync.WaitGroup) {
 
 	for {
 		select {
-		case message, ok := <-c.source.GetOutput():
-			if !ok {
-				c.flush()
-				return
-			}
-			if message == nil {
-				continue
-			}
-
+		case message := <-c.source.GetOutput():
 			if err := c.upsert(message); err != nil {
 				var fields = utils.GetFieldsFromMessage(message)
 				log.Error().Fields(fields).Err(err).Msg("Unexpected error during upsert. Skipping message to avoid blocking partition.")
